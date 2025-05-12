@@ -457,11 +457,17 @@ export class PdfViewerComponent
 
     this.initPDFServices();
 
-    if (this._showAll) {
-      this.pdfViewer = new PDFJSViewer.PDFViewer(this.getPDFOptions());
-    } else {
-      this.pdfViewer = new PDFJSViewer.PDFSinglePageViewer(this.getPDFOptions());
+    try {
+      if (this._showAll) {
+        this.pdfViewer = new PDFJSViewer.PDFViewer(this.getPDFOptions());
+      } else {
+        this.pdfViewer = new PDFJSViewer.PDFSinglePageViewer(this.getPDFOptions());
+      }
+    } catch (error) {
+      // TODO: Handle error which makes absolutely positioned pdf container mandatory
+      console.error(error);
     }
+
     this.pdfLinkService.setViewer(this.pdfViewer);
 
     this.pdfViewer._currentPageNumber = this._page;
