@@ -63,7 +63,9 @@ export enum RenderTextMode {
 @Component({
   selector: 'pdf-viewer',
   template: `
-    <div #pdfViewerContainer class="ng2-pdf-viewer-container">
+    <div #pdfViewerContainer
+         class="ng2-pdf-viewer-container"
+         [class.flex-embed]="flexEmbed">
       <div class="pdfViewer"></div>
     </div>
   `,
@@ -121,7 +123,7 @@ export class PdfViewerComponent
   @Output('on-progress') onProgress = new EventEmitter<PDFProgressData>();
   @Output() pageChange: EventEmitter<number> = new EventEmitter<number>(true);
   @Input() src?: string | Uint8Array | PDFSource;
-
+  @Input('flex-embed') flexEmbed: boolean = false;
   @Input('c-maps-url')
   set cMapsUrl(cMapsUrl: string) {
     this._cMapsUrl = cMapsUrl;
@@ -256,7 +258,7 @@ export class PdfViewerComponent
       pdfWorkerSrc = (window as any).pdfWorkerSrc;
     } else {
       pdfWorkerSrc = `https://cdn.jsdelivr.net/npm/pdfjs-dist@${pdfJsVersion
-        }/legacy/build/pdf.worker.min.mjs`;
+      }/legacy/build/pdf.worker.min.mjs`;
     }
 
     assign(GlobalWorkerOptions, 'workerSrc', pdfWorkerSrc);
@@ -353,7 +355,7 @@ export class PdfViewerComponent
 
           this.pdfViewer.currentScale = scale;
           if (stickToPage)
-            this.pdfViewer.scrollPageIntoView({ pageNumber: page.pageNumber, ignoreDestinationZoom: true })
+            this.pdfViewer.scrollPageIntoView({ pageNumber: page.pageNumber, ignoreDestinationZoom: true });
         }
       });
   }
@@ -426,7 +428,7 @@ export class PdfViewerComponent
     });
     this.pdfFindController = new PDFJSViewer.PDFFindController({
       eventBus: this.eventBus,
-      linkService: this.pdfLinkService,
+      linkService: this.pdfLinkService
     });
   }
 
@@ -442,7 +444,7 @@ export class PdfViewerComponent
       findController: this.pdfFindController,
       l10n: new PDFJSViewer.GenericL10n('en'),
       imageResourcesPath: this._imageResourcesPath,
-      annotationEditorMode: PDFJS.AnnotationEditorType.DISABLE,
+      annotationEditorMode: PDFJS.AnnotationEditorType.DISABLE
     };
   }
 
@@ -487,7 +489,7 @@ export class PdfViewerComponent
     const params: any = {
       cMapUrl: this._cMapsUrl,
       cMapPacked: true,
-      enableXfa: true,
+      enableXfa: true
     };
     params.isEvalSupported = false; // http://cve.org/CVERecord?id=CVE-2024-4367
 
@@ -575,7 +577,7 @@ export class PdfViewerComponent
       const sub = this.pageInitialized.subscribe(() => {
         this.updateSize();
         sub.unsubscribe();
-      })
+      });
     } else {
       this.updateSize();
     }

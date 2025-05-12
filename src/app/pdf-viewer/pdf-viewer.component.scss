@@ -4,6 +4,11 @@
   height: 100%;
   width: 100%;
   -webkit-overflow-scrolling: touch;
+
+  &.flex-embed {
+    display: block;
+    position: relative;
+  }
 }
 
 :host {
